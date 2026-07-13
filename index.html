@@ -537,6 +537,15 @@ footer p { margin-top: 10px; font-size: 12px; color: var(--ink-dim); max-width: 
       <label for="f-area">你在哪个地区?<i>*</i></label>
       <input id="f-area" type="text" required maxlength="30" placeholder="例:KL / PJ / Selangor">
     </div>
+    <div class="field">
+      <label for="f-goal">你比较想要的是?<i>*</i></label>
+      <select id="f-goal" required>
+        <option value="" disabled selected>请选择</option>
+        <option>学会理财 / 交易</option>
+        <option>增加一份副业收入</option>
+        <option>认真做事业 带自己的团队</option>
+      </select>
+    </div>
     <button type="submit" class="cta">提交并打开 WhatsApp</button>
     <p class="mnote">资料只用于 Joyce 了解你的情况 不会外传</p>
   </form>
@@ -562,7 +571,7 @@ footer p { margin-top: 10px; font-size: 12px; color: var(--ink-dim); max-width: 
     var v = function (id) { return document.getElementById(id).value.trim(); };
     var NL = String.fromCharCode(10);
     var msg = '你好 Joyce 我想报名 8月1日 女性成长创业分享会 🌸' + NL + '称呼:' + v('f-name') +
-      NL + '年龄:' + v('f-age') + NL + '身份:' + v('f-role') + NL + '经验:' + v('f-exp') + NL + '地区:' + v('f-area');
+      NL + '年龄:' + v('f-age') + NL + '身份:' + v('f-role') + NL + '经验:' + v('f-exp') + NL + '地区:' + v('f-area') + NL + '目标:' + v('f-goal');
     window.open('https://wa.me/601162206885?text=' + encodeURIComponent(msg), '_blank');
     closeModal();
   });
