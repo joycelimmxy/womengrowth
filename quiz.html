@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>现场测评 · 女性成长创业分享会</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<style>
+:root {
+  --ground:#1a0c14; --panel:#241019; --panel-2:#2e1620;
+  --ink:#f7eef1; --ink-dim:#cfb3bd;
+  --rose:#e8a9bc; --rose-hi:#f3c0cf; --rose-deep:#c9748e; --rose-ink:#3a1420;
+  --gold:#d9b96e; --line:rgba(217,139,160,.28);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:
+    radial-gradient(52% 30% at 8% 12%, rgba(201,116,142,.12), transparent 70%),
+    radial-gradient(46% 26% at 96% 60%, rgba(217,185,110,.10), transparent 70%),
+    var(--ground);
+  color:var(--ink); font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  line-height:1.7; padding:28px 18px 60px;
+}
+.wrap { max-width:560px; margin:0 auto; }
+.tag { text-align:center; font-size:13px; letter-spacing:4px; color:var(--rose); font-weight:600; }
+h1 { text-align:center; font-size:27px; letter-spacing:1px; margin-top:8px; font-weight:800;
+  background:linear-gradient(180deg,var(--rose-hi),var(--rose-deep));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.sub { text-align:center; font-size:14px; color:var(--ink-dim); margin:8px 0 26px; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:14px; color:var(--ink-dim); margin-bottom:6px; }
+.field label i { color:var(--rose-deep); font-style:normal; }
+.field input, .field textarea { width:100%; font-size:16px; color:var(--ink);
+  background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:12px 14px;
+  font-family:inherit; }
+.field textarea { min-height:76px; resize:vertical; }
+.field input:focus, .field textarea:focus { outline:2px solid var(--rose-deep); outline-offset:1px; }
+.q { margin:26px 0 0; }
+.q .qt { font-size:16.5px; font-weight:700; margin-bottom:10px; }
+.q .qt b { color:var(--rose); margin-right:6px; }
+.opt { display:block; position:relative; margin-bottom:9px; cursor:pointer; }
+.opt input { position:absolute; opacity:0; }
+.opt span { display:block; padding:12px 14px; border-radius:12px; font-size:15px;
+  background:var(--panel); border:1px solid var(--line); transition:border-color .2s, background .2s; }
+.opt input:checked + span { border-color:var(--rose-deep); background:var(--panel-2);
+  box-shadow:0 0 0 1px var(--rose-deep); }
+.divider { margin:32px 0 6px; display:flex; align-items:center; gap:14px;
+  font-size:15px; letter-spacing:2px; color:var(--rose); font-weight:700; }
+.divider::before, .divider::after { content:""; flex:1; height:1px; background:var(--line); }
+.submit { display:block; width:100%; margin-top:28px; border:0; cursor:pointer;
+  font-size:19px; font-weight:800; letter-spacing:1px; font-family:inherit;
+  background:linear-gradient(180deg,var(--rose-hi),var(--rose-deep)); color:var(--rose-ink);
+  border-radius:999px; padding:16px 0; box-shadow:0 10px 26px rgba(201,116,142,.38); }
+.note { text-align:center; font-size:12px; color:var(--ink-dim); margin-top:12px; }
+.err { color:#f3c0cf; font-size:14px; text-align:center; margin-top:12px; display:none; }
+/* result */
+#result { display:none; text-align:center; padding-top:8vh; }
+#result .rtag { font-size:13px; letter-spacing:4px; color:var(--ink-dim); }
+#result h2 { font-size:34px; margin:10px 0 4px; font-weight:800;
+  background:linear-gradient(180deg,var(--rose-hi),var(--rose-deep));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+#result p { color:var(--ink-dim); max-width:26em; margin:10px auto 0; font-size:15.5px; }
+#result a { display:inline-flex; align-items:center; gap:10px; margin-top:30px; text-decoration:none;
+  font-size:19px; font-weight:800; letter-spacing:1px;
+  background:linear-gradient(180deg,var(--rose-hi),var(--rose-deep)); color:var(--rose-ink);
+  border-radius:999px; padding:16px 34px; box-shadow:0 10px 26px rgba(201,116,142,.38); }
+</style>
+</head>
+<body>
+<div class="wrap" id="quiz">
+  <div class="tag">引领先锋 · 现场测评</div>
+  <h1>3 分钟 认识你自己</h1>
+  <p class="sub">没有对错 选最像你的就好</p>
+
+  <form id="qform">
+    <div class="field"><label>姓名<i>*</i></label><input id="p-name" required maxlength="30" placeholder="例:Wei Ling"></div>
+    <div class="field"><label>WhatsApp 号码<i>*</i></label><input id="p-phone" type="tel" inputmode="tel" required maxlength="20" placeholder="例:0123456789"></div>
+    <div class="field"><label>Instagram(选填)</label><input id="p-ig" maxlength="40" placeholder="@"></div>
+
+    <div class="divider">选择题</div>
+    <div id="mcq"></div>
+
+    <div class="divider">写几句就好</div>
+    <div class="field q"><label class="qt"><b>9</b>今晚为什么会来?你最想改变现状的哪一点?<i>*</i></label><textarea id="o1" required maxlength="500"></textarea></div>
+    <div class="field q"><label class="qt"><b>10</b>三年后 你想过的是什么样的生活?越具体越好<i>*</i></label><textarea id="o2" required maxlength="500"></textarea></div>
+    <div class="field q"><label class="qt"><b>11</b>如果加入团队 你最大的强项是什么?最担心的困难又是什么?<i>*</i></label><textarea id="o3" required maxlength="500"></textarea></div>
+
+    <button type="submit" class="submit">提交 看我的类型</button>
+    <p class="err" id="err">还有题目没答完 往上看看粉色框框</p>
+    <p class="note">答案只有 Joyce 会看到 不会外传</p>
+  </form>
+</div>
+
+<div class="wrap" id="result">
+  <div class="rtag">你的类型</div>
+  <h2 id="r-name"></h2>
+  <p id="r-desc"></p>
+  <a id="r-wa" href="#">发送结果给 Joyce 完成测评</a>
+  <p class="note">按发送才算完成哦</p>
+</div>
+
+<script>
+var QS = [
+  ["朋友约出去玩,你通常是那个?", ["负责计划和安排的人","带气氛、跟谁都聊得来的人","帮大家订位、拍照、处理杂事的人","跟着走就好的人"]],
+  ["接到一件完全没做过的事,你的第一反应?", ["先想清楚怎么拆,需要找谁一起做","直接开始做,边做边学","先查资料、做足准备才动手","有点慌,希望有人一步步教我"]],
+  ["被人拒绝或者泼冷水的时候,你会?", ["分析为什么被拒,换个方式再来","没感觉,马上找下一个","会难过一阵,但还是会继续","会怀疑自己是不是不适合"]],
+  ["哪一种成就感最让你上瘾?", ["我带的人做出成绩,比我自己赢还爽","靠自己拿下一个很难搞定的人","把一件事做到没有人挑得出毛病","平平稳稳,不出错就好"]],
+  ["一群人讨论半天没结论,你会?", ["站出来拍板:就这样做","说服大家听我的方案","把每个人的意见整理出来给大家选","等别人决定"]],
+  ["你的社交媒体(IG/小红书/抖音)?", ["有经营,知道怎么让内容有人看","常发,喜欢分享生活","偶尔发,多数在看别人","几乎不发"]],
+  ["关于赚钱,哪句最像你的想法?", ["我要建立一份可以越做越大的事业","多劳多得、上不封顶,最吸引我","稳定增长,每个月看得到进步就好","说实话,我还没想清楚"]],
+  ["三个月后的你,最想变成哪一种?", ["有自己的小团队,开始带人","收入明显增加,证明给身边的人看","学到一套完整的技能,变得专业","先看看这条路适不适合我"]]
+];
+var TYPES = {
+  L: ["领航者", "你天生想赢的方式是带着一群人一起赢 你适合更大的舞台 —— 今晚记得来找 Joyce 聊聊"],
+  S: ["开拓者", "你的冲劲和不怕被拒绝 是最值钱的特质 这条路上你会跑得很快 —— 来找 Joyce 聊聊"],
+  T: ["深耕者", "你做事稳、能坚持 只要方向对 你会走得比大多数人远 —— 来找 Joyce 聊聊"],
+  O: ["探索者", "你还在寻找适合自己的路 这很正常 —— 今晚先听 有感觉再聊"]
+};
+var mcq = document.getElementById('mcq');
+QS.forEach(function (q, i) {
+  var h = '<div class="q"><div class="qt"><b>' + (i + 1) + '</b>' + q[0] + '</div>';
+  'LSTO'.split('').forEach(function (t, j) {
+    h += '<label class="opt"><input type="radio" name="q' + i + '" value="' + t + '" required><span>' + q[1][j] + '</span></label>';
+  });
+  mcq.insertAdjacentHTML('beforeend', h + '</div>');
+});
+document.getElementById('qform').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var v = function (id) { return document.getElementById(id).value.trim(); };
+  var picks = [], count = { L: 0, S: 0, T: 0, O: 0 };
+  for (var i = 0; i < QS.length; i++) {
+    var c = document.querySelector('input[name="q' + i + '"]:checked');
+    if (!c) { document.getElementById('err').style.display = 'block'; return; }
+    picks.push((i + 1) + c.value); count[c.value]++;
+  }
+  var type = 'LSTO'.split('').sort(function (a, b) { return count[b] - count[a]; })[0];
+  var NL = String.fromCharCode(10);
+  var msg = '测评结果 🌸' + NL +
+    '姓名:' + v('p-name') + NL + 'WhatsApp:' + v('p-phone') + NL + 'IG:' + (v('p-ig') || '-') + NL +
+    '类型:' + TYPES[type][0] + ' (' + type + ')  L' + count.L + ' S' + count.S + ' T' + count.T + ' O' + count.O + NL +
+    '答案:' + picks.join(' ') + NL +
+    '为什么来:' + v('o1') + NL + '三年后:' + v('o2') + NL + '强项与担心:' + v('o3');
+  document.getElementById('r-name').textContent = TYPES[type][0];
+  document.getElementById('r-desc').textContent = TYPES[type][1];
+  document.getElementById('r-wa').href = 'https://wa.me/601162206885?text=' + encodeURIComponent(msg);
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+  scrollTo(0, 0);
+});
+</script>
+</body>
+</html>
