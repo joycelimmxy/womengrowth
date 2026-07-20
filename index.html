@@ -10,6 +10,22 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://joycelimmxy.github.io/womengrowth/">
 <meta property="og:image" content="https://joycelimmxy.github.io/womengrowth/og.jpg">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '4306450766268348');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=4306450766268348&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 <style>
@@ -575,6 +591,7 @@ footer p { margin-top: 10px; font-size: 12px; color: var(--ink-dim); max-width: 
     var v = function (id) { return document.getElementById(id).value.trim(); };
     var NL = String.fromCharCode(10);
     sendToSheet({ 来源: '报名', 称呼: v('f-name'), 年龄: v('f-age'), 身份: v('f-role'), 经验: v('f-exp'), 地区: v('f-area'), 投入: v('f-goal') });
+    if (typeof fbq === 'function') fbq('track', 'Lead');
     var msg = '你好 Joyce 我想报名 8月1日 成长创业分享会 🌸' + NL + '称呼:' + v('f-name') +
       NL + '年龄:' + v('f-age') + NL + '身份:' + v('f-role') + NL + '经验:' + v('f-exp') + NL + '地区:' + v('f-area') + NL + '投入:' + v('f-goal');
     window.open('https://wa.me/601162206885?text=' + encodeURIComponent(msg), '_blank');
