@@ -124,6 +124,11 @@ QS.forEach(function (q, i) {
   });
   mcq.insertAdjacentHTML('beforeend', h + '</div>');
 });
+var SHEET_ENDPOINT = '__SHEET__';
+function sendToSheet(data) {
+  if (SHEET_ENDPOINT.indexOf('http') !== 0) return;
+  try { fetch(SHEET_ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) }); } catch (e) {}
+}
 document.getElementById('qform').addEventListener('submit', function (e) {
   e.preventDefault();
   var v = function (id) { return document.getElementById(id).value.trim(); };
@@ -134,6 +139,7 @@ document.getElementById('qform').addEventListener('submit', function (e) {
     picks.push((i + 1) + c.value); count[c.value]++;
   }
   var type = 'LSTO'.split('').sort(function (a, b) { return count[b] - count[a]; })[0];
+  sendToSheet({ 来源: '测验', 姓名: v('p-name'), WhatsApp: v('p-phone'), IG: v('p-ig') || '-', 类型: TYPES[type][0] + ' (' + type + ')', L: count.L, S: count.S, T: count.T, O: count.O, 答案: picks.join(' '), 为什么来: v('o1'), 三年后: v('o2'), 强项与担心: v('o3') });
   var NL = String.fromCharCode(10);
   var msg = '测评结果 🌸' + NL +
     '姓名:' + v('p-name') + NL + 'WhatsApp:' + v('p-phone') + NL + 'IG:' + (v('p-ig') || '-') + NL +
