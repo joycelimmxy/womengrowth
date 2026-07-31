@@ -68,6 +68,7 @@ h1 { text-align:center; font-size:26px; letter-spacing:1px; margin-top:8px; font
   background:linear-gradient(180deg,var(--rose-hi),var(--rose-deep));
   -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
 #result p { color:var(--ink-dim); max-width:26em; margin:10px auto 0; font-size:15.5px; }
+#result .done { color:var(--rose-hi); font-weight:700; font-size:16px; margin-top:24px; }
 #result a { display:inline-flex; align-items:center; gap:10px; margin-top:30px; text-decoration:none;
   font-size:19px; font-weight:800; letter-spacing:1px;
   background:linear-gradient(180deg,var(--rose-hi),var(--rose-deep)); color:var(--rose-ink);
@@ -107,8 +108,8 @@ h1 { text-align:center; font-size:26px; letter-spacing:1px; margin-top:8px; font
   <div class="rtag"><span class="zh-text">你的类型</span><span class="en-text">Your Type</span></div>
   <h2 id="r-name"></h2>
   <p id="r-desc"></p>
-  <a id="r-wa" href="#"><span class="zh-text">发送结果给 Joyce 完成测评</span><span class="en-text">Send Result to Joyce to Finish</span></a>
-  <p class="note"><span class="zh-text">按发送才算完成哦</span><span class="en-text">It only counts once you hit send</span></p>
+  <p class="done"><span class="zh-text">✓ 测评完成 你的结果已自动记录</span><span class="en-text">✓ Done — your result is recorded</span></p>
+  <p class="note"><span class="zh-text">今晚记得来找 Joyce 当面聊聊哦</span><span class="en-text">Come find Joyce tonight for a chat</span></p>
 </div>
 
 <script>
@@ -178,19 +179,11 @@ document.getElementById('qform').addEventListener('submit', function (e) {
   }
   var type = 'LSTO'.split('').sort(function (a, b) { return count[b] - count[a]; })[0];
   var typeLabel = TYPES[type].zh[0] + ' ' + TYPES[type].en[0] + ' (' + type + ')';
-  var NL = String.fromCharCode(10);
   sendToSheet({ 来源: '测验', 姓名: v('p-name'), WhatsApp: v('p-phone'), IG: v('p-ig') || '-', 类型: typeLabel,
     L: count.L, S: count.S, T: count.T, O: count.O, 答案: picks.join(' '),
     为什么来: v('o1'), 三年后: v('o2'), 强项与担心: v('o3') });
-  var msg = (EN ? 'Assessment Result 🌸' : '测评结果 🌸') + NL +
-    (EN ? 'Name' : '姓名') + ':' + v('p-name') + NL + 'WhatsApp:' + v('p-phone') + NL + 'IG:' + (v('p-ig') || '-') + NL +
-    (EN ? 'Type' : '类型') + ':' + typeLabel + '  L' + count.L + ' S' + count.S + ' T' + count.T + ' O' + count.O + NL +
-    (EN ? 'Answers' : '答案') + ':' + picks.join(' ') + NL +
-    (EN ? 'Why' : '为什么来') + ':' + v('o1') + NL + (EN ? '3yr' : '三年后') + ':' + v('o2') + NL +
-    (EN ? 'Strength/Worry' : '强项与担心') + ':' + v('o3');
   document.getElementById('r-name').textContent = TYPES[type].zh[0] + ' · ' + TYPES[type].en[0];
   document.getElementById('r-desc').textContent = EN ? TYPES[type].en[1] : TYPES[type].zh[1];
-  document.getElementById('r-wa').href = 'https://wa.me/601162206885?text=' + encodeURIComponent(msg);
   document.getElementById('quiz').style.display = 'none';
   document.getElementById('result').style.display = 'block';
   scrollTo(0, 0);
