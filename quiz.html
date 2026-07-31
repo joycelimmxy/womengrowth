@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>现场测评 · 合作伙伴分享会</title>
+<title>现场测评 · 合作伙伴分享会 | Live Assessment</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <style>
@@ -19,11 +19,20 @@ body {
     radial-gradient(46% 26% at 96% 60%, rgba(217,185,110,.10), transparent 70%),
     var(--ground);
   color:var(--ink); font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-  line-height:1.7; padding:28px 18px 60px;
+  line-height:1.7; padding:20px 18px 60px;
 }
 .wrap { max-width:560px; margin:0 auto; }
+.lang-toggle { display:flex; justify-content:center; margin-bottom:18px; }
+.lang-toggle button { font-family:inherit; font-size:14px; font-weight:700; cursor:pointer;
+  padding:8px 22px; border:1px solid var(--line); background:var(--panel); color:var(--ink-dim); }
+.lang-toggle button:first-child { border-radius:999px 0 0 999px; }
+.lang-toggle button:last-child { border-radius:0 999px 999px 0; border-left:0; }
+.lang-toggle button.active { background:linear-gradient(180deg,var(--rose-hi),var(--rose-deep)); color:var(--rose-ink); border-color:transparent; }
+.en-text { display:none; }
+body.en .zh-text { display:none; }
+body.en .en-text { display:inline; }
 .tag { text-align:center; font-size:13px; letter-spacing:4px; color:var(--rose); font-weight:600; }
-h1 { text-align:center; font-size:27px; letter-spacing:1px; margin-top:8px; font-weight:800;
+h1 { text-align:center; font-size:26px; letter-spacing:1px; margin-top:8px; font-weight:800;
   background:linear-gradient(180deg,var(--rose-hi),var(--rose-deep));
   -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
 .sub { text-align:center; font-size:14px; color:var(--ink-dim); margin:8px 0 26px; }
@@ -40,9 +49,9 @@ h1 { text-align:center; font-size:27px; letter-spacing:1px; margin-top:8px; font
 .q .qt b { color:var(--rose); margin-right:6px; }
 .opt { display:block; position:relative; margin-bottom:9px; cursor:pointer; }
 .opt input { position:absolute; opacity:0; }
-.opt span { display:block; padding:12px 14px; border-radius:12px; font-size:15px;
+.opt .box { display:block; padding:12px 14px; border-radius:12px; font-size:15px;
   background:var(--panel); border:1px solid var(--line); transition:border-color .2s, background .2s; }
-.opt input:checked + span { border-color:var(--rose-deep); background:var(--panel-2);
+.opt input:checked + .box { border-color:var(--rose-deep); background:var(--panel-2);
   box-shadow:0 0 0 1px var(--rose-deep); }
 .divider { margin:32px 0 6px; display:flex; align-items:center; gap:14px;
   font-size:15px; letter-spacing:2px; color:var(--rose); font-weight:700; }
@@ -53,10 +62,9 @@ h1 { text-align:center; font-size:27px; letter-spacing:1px; margin-top:8px; font
   border-radius:999px; padding:16px 0; box-shadow:0 10px 26px rgba(201,116,142,.38); }
 .note { text-align:center; font-size:12px; color:var(--ink-dim); margin-top:12px; }
 .err { color:#f3c0cf; font-size:14px; text-align:center; margin-top:12px; display:none; }
-/* result */
 #result { display:none; text-align:center; padding-top:8vh; }
 #result .rtag { font-size:13px; letter-spacing:4px; color:var(--ink-dim); }
-#result h2 { font-size:34px; margin:10px 0 4px; font-weight:800;
+#result h2 { font-size:32px; margin:10px 0 4px; font-weight:800;
   background:linear-gradient(180deg,var(--rose-hi),var(--rose-deep));
   -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
 #result p { color:var(--ink-dim); max-width:26em; margin:10px auto 0; font-size:15.5px; }
@@ -68,62 +76,92 @@ h1 { text-align:center; font-size:27px; letter-spacing:1px; margin-top:8px; font
 </head>
 <body>
 <div class="wrap" id="quiz">
-  <div class="tag">引领先锋 · 现场测评</div>
-  <h1>3 分钟 认识你自己</h1>
-  <p class="sub">没有对错 选最像你的就好</p>
+  <div class="lang-toggle">
+    <button type="button" id="btn-zh" class="active" onclick="setLang(false)">中文</button>
+    <button type="button" id="btn-en" onclick="setLang(true)">English</button>
+  </div>
+  <div class="tag">引领先锋 · 合作伙伴分享会</div>
+  <h1><span class="zh-text">3 分钟 认识你自己</span><span class="en-text">3 Minutes to Know Yourself</span></h1>
+  <p class="sub"><span class="zh-text">没有对错 选最像你的就好</span><span class="en-text">No right or wrong — just pick what's most like you</span></p>
 
   <form id="qform">
-    <div class="field"><label>姓名<i>*</i></label><input id="p-name" required maxlength="30" placeholder="例:Wei Ling"></div>
-    <div class="field"><label>WhatsApp 号码<i>*</i></label><input id="p-phone" type="tel" inputmode="tel" required maxlength="20" placeholder="例:0123456789"></div>
-    <div class="field"><label>Instagram(选填)</label><input id="p-ig" maxlength="40" placeholder="@"></div>
+    <div class="field"><label><span class="zh-text">姓名</span><span class="en-text">Name</span><i>*</i></label><input id="p-name" required maxlength="30"></div>
+    <div class="field"><label><span class="zh-text">WhatsApp 号码</span><span class="en-text">WhatsApp Number</span><i>*</i></label><input id="p-phone" type="tel" inputmode="tel" required maxlength="20"></div>
+    <div class="field"><label>Instagram <span class="zh-text">(选填)</span><span class="en-text">(optional)</span></label><input id="p-ig" maxlength="40" placeholder="@"></div>
 
-    <div class="divider">选择题</div>
+    <div class="divider"><span class="zh-text">选择题</span><span class="en-text">Multiple Choice</span></div>
     <div id="mcq"></div>
 
-    <div class="divider">写几句就好</div>
-    <div class="field q"><label class="qt"><b>9</b>今晚为什么会来?你最想改变现状的哪一点?<i>*</i></label><textarea id="o1" required maxlength="500"></textarea></div>
-    <div class="field q"><label class="qt"><b>10</b>三年后 你想过的是什么样的生活?越具体越好<i>*</i></label><textarea id="o2" required maxlength="500"></textarea></div>
-    <div class="field q"><label class="qt"><b>11</b>如果加入团队 你最大的强项是什么?最担心的困难又是什么?<i>*</i></label><textarea id="o3" required maxlength="500"></textarea></div>
+    <div class="divider"><span class="zh-text">写几句就好</span><span class="en-text">Just Write a Few Lines</span></div>
+    <div class="field q"><label class="qt"><b>9</b><span class="zh-text">今晚为什么会来?你最想改变现状的哪一点?</span><span class="en-text">Why are you here tonight? What do you most want to change?</span><i>*</i></label><textarea id="o1" required maxlength="500"></textarea></div>
+    <div class="field q"><label class="qt"><b>10</b><span class="zh-text">三年后 你想过的是什么样的生活?越具体越好</span><span class="en-text">3 years from now, what life do you want? Be as specific as you can</span><i>*</i></label><textarea id="o2" required maxlength="500"></textarea></div>
+    <div class="field q"><label class="qt"><b>11</b><span class="zh-text">如果加入团队 你最大的强项是什么?最担心的困难又是什么?</span><span class="en-text">If you join the team, your biggest strength? Your biggest worry?</span><i>*</i></label><textarea id="o3" required maxlength="500"></textarea></div>
 
-    <button type="submit" class="submit">提交 看我的类型</button>
-    <p class="err" id="err">还有题目没答完 往上看看粉色框框</p>
-    <p class="note">答案只有 Joyce 会看到 不会外传</p>
+    <button type="submit" class="submit"><span class="zh-text">提交 看我的类型</span><span class="en-text">Submit — See My Type</span></button>
+    <p class="err" id="err"><span class="zh-text">还有题目没答完 往上看看粉色框框</span><span class="en-text">Some questions aren't done — check above</span></p>
+    <p class="note"><span class="zh-text">答案只有 Joyce 会看到 不会外传</span><span class="en-text">Only Joyce sees your answers — kept private</span></p>
   </form>
 </div>
 
 <div class="wrap" id="result">
-  <div class="rtag">你的类型</div>
+  <div class="rtag"><span class="zh-text">你的类型</span><span class="en-text">Your Type</span></div>
   <h2 id="r-name"></h2>
   <p id="r-desc"></p>
-  <a id="r-wa" href="#">发送结果给 Joyce 完成测评</a>
-  <p class="note">按发送才算完成哦</p>
+  <a id="r-wa" href="#"><span class="zh-text">发送结果给 Joyce 完成测评</span><span class="en-text">Send Result to Joyce to Finish</span></a>
+  <p class="note"><span class="zh-text">按发送才算完成哦</span><span class="en-text">It only counts once you hit send</span></p>
 </div>
 
 <script>
+var EN = false;
+function setLang(en) {
+  EN = en;
+  document.body.classList.toggle('en', en);
+  document.getElementById('btn-en').classList.toggle('active', en);
+  document.getElementById('btn-zh').classList.toggle('active', !en);
+  document.getElementById('p-name').placeholder = en ? 'e.g. Wei Ling' : '例:Wei Ling';
+  document.getElementById('p-phone').placeholder = en ? 'e.g. 0123456789' : '例:0123456789';
+  document.documentElement.lang = en ? 'en' : 'zh';
+}
+
 var QS = [
-  ["朋友约出去玩,你通常是那个?", ["负责计划和安排的人","带气氛、跟谁都聊得来的人","帮大家订位、拍照、处理杂事的人","跟着走就好的人"]],
-  ["接到一件完全没做过的事,你的第一反应?", ["先想清楚怎么拆,需要找谁一起做","直接开始做,边做边学","先查资料、做足准备才动手","有点慌,希望有人一步步教我"]],
-  ["被人拒绝或者泼冷水的时候,你会?", ["分析为什么被拒,换个方式再来","没感觉,马上找下一个","会难过一阵,但还是会继续","会怀疑自己是不是不适合"]],
-  ["哪一种成就感最让你上瘾?", ["我带的人做出成绩,比我自己赢还爽","靠自己拿下一个很难搞定的人","把一件事做到没有人挑得出毛病","平平稳稳,不出错就好"]],
-  ["一群人讨论半天没结论,你会?", ["站出来拍板:就这样做","说服大家听我的方案","把每个人的意见整理出来给大家选","等别人决定"]],
-  ["你的社交媒体(IG/小红书/抖音)?", ["有经营,知道怎么让内容有人看","常发,喜欢分享生活","偶尔发,多数在看别人","几乎不发"]],
-  ["关于赚钱,哪句最像你的想法?", ["我要建立一份可以越做越大的事业","多劳多得、上不封顶,最吸引我","稳定增长,每个月看得到进步就好","说实话,我还没想清楚"]],
-  ["三个月后的你,最想变成哪一种?", ["有自己的小团队,开始带人","收入明显增加,证明给身边的人看","学到一套完整的技能,变得专业","先看看这条路适不适合我"]]
+  { zh:"朋友约出去玩,你通常是那个?", en:"When friends hang out, you're usually the one who...",
+    o:[["负责计划和安排的人","Plans and organizes everything"],["带气氛、跟谁都聊得来的人","Brings the vibe, talks to anyone"],["帮大家订位、拍照、处理杂事的人","Handles bookings, photos, the little things"],["跟着走就好的人","Just goes with the flow"]] },
+  { zh:"接到一件完全没做过的事,你的第一反应?", en:"Given something you've never done, your first reaction is...",
+    o:[["先想清楚怎么拆,需要找谁一起做","Break it down, figure out who to team up with"],["直接开始做,边做边学","Just start, learn as you go"],["先查资料、做足准备才动手","Research and prepare fully first"],["有点慌,希望有人一步步教我","A bit anxious, wish someone would guide me"]] },
+  { zh:"被人拒绝或者泼冷水的时候,你会?", en:"When you get rejected or shot down, you...",
+    o:[["分析为什么被拒,换个方式再来","Analyze why, then try a new approach"],["没感觉,马上找下一个","Shrug it off, move to the next"],["会难过一阵,但还是会继续","Feel down a while, but keep going"],["会怀疑自己是不是不适合","Start doubting if I'm cut out for it"]] },
+  { zh:"哪一种成就感最让你上瘾?", en:"Which achievement gives you the biggest high?",
+    o:[["我带的人做出成绩,比我自己赢还爽","When people I lead succeed — better than winning myself"],["靠自己拿下一个很难搞定的人","Closing a tough one all on my own"],["把一件事做到没有人挑得出毛病","Doing it so well no one can fault it"],["平平稳稳,不出错就好","Steady and smooth, no mistakes"]] },
+  { zh:"一群人讨论半天没结论,你会?", en:"When a group talks forever with no conclusion, you...",
+    o:[["站出来拍板:就这样做","Step up and call it: let's do this"],["说服大家听我的方案","Convince everyone to go with my plan"],["把每个人的意见整理出来给大家选","Organize everyone's ideas for the group"],["等别人决定","Wait for others to decide"]] },
+  { zh:"你的社交媒体(IG/小红书/抖音)?", en:"Your social media (IG / Xiaohongshu / TikTok)?",
+    o:[["有经营,知道怎么让内容有人看","I run it actively, I know how to get views"],["常发,喜欢分享生活","Post often, love sharing my life"],["偶尔发,多数在看别人","Post sometimes, mostly just browse"],["几乎不发","Barely post"]] },
+  { zh:"关于赚钱,哪句最像你的想法?", en:"About making money, which sounds most like you?",
+    o:[["我要建立一份可以越做越大的事业","I want to build a business that keeps growing"],["多劳多得、上不封顶,最吸引我","More effort more reward, no ceiling — that's me"],["稳定增长,每个月看得到进步就好","Steady growth, monthly progress is enough"],["说实话,我还没想清楚","Honestly, I haven't figured it out yet"]] },
+  { zh:"三个月后的你,最想变成哪一种?", en:"3 months from now, which do you most want to be?",
+    o:[["有自己的小团队,开始带人","Have my own small team, start leading"],["收入明显增加,证明给身边的人看","Income clearly up, proving it to people"],["学到一套完整的技能,变得专业","Learned a full skill set, become a pro"],["先看看这条路适不适合我","First see if this path suits me"]] }
 ];
 var TYPES = {
-  L: ["领航者", "你天生想赢的方式是带着一群人一起赢 你适合更大的舞台 —— 今晚记得来找 Joyce 聊聊"],
-  S: ["开拓者", "你的冲劲和不怕被拒绝 是最值钱的特质 这条路上你会跑得很快 —— 来找 Joyce 聊聊"],
-  T: ["深耕者", "你做事稳、能坚持 只要方向对 你会走得比大多数人远 —— 来找 Joyce 聊聊"],
-  O: ["探索者", "你还在寻找适合自己的路 这很正常 —— 今晚先听 有感觉再聊"]
+  L: { zh:["领航者","你天生想赢的方式是带着一群人一起赢 你适合更大的舞台 —— 今晚记得来找 Joyce 聊聊"],
+       en:["Navigator","You win by bringing people up with you. You're built for a bigger stage — come find Joyce tonight."] },
+  S: { zh:["开拓者","你的冲劲和不怕被拒绝 是最值钱的特质 这条路上你会跑得很快 —— 来找 Joyce 聊聊"],
+       en:["Trailblazer","Your drive and thick skin are your most valuable traits. You'll move fast here — come find Joyce."] },
+  T: { zh:["深耕者","你做事稳、能坚持 只要方向对 你会走得比大多数人远 —— 来找 Joyce 聊聊"],
+       en:["Cultivator","You're steady and you persist. With the right direction, you'll go further than most — come find Joyce."] },
+  O: { zh:["探索者","你还在寻找适合自己的路 这很正常 —— 今晚先听 有感觉再聊"],
+       en:["Explorer","You're still finding your path — that's normal. Listen tonight, talk when you feel it."] }
 };
+
 var mcq = document.getElementById('mcq');
 QS.forEach(function (q, i) {
-  var h = '<div class="q"><div class="qt"><b>' + (i + 1) + '</b>' + q[0] + '</div>';
+  var h = '<div class="q"><div class="qt"><b>' + (i + 1) + '</b><span class="zh-text">' + q.zh + '</span><span class="en-text">' + q.en + '</span></div>';
   'LSTO'.split('').forEach(function (t, j) {
-    h += '<label class="opt"><input type="radio" name="q' + i + '" value="' + t + '" required><span>' + q[1][j] + '</span></label>';
+    h += '<label class="opt"><input type="radio" name="q' + i + '" value="' + t + '" required>' +
+         '<span class="box"><span class="zh-text">' + q.o[j][0] + '</span><span class="en-text">' + q.o[j][1] + '</span></span></label>';
   });
   mcq.insertAdjacentHTML('beforeend', h + '</div>');
 });
+
 var SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwtPzy2_OabiIPUKe1e43I-SklXtGafibwaDZY85c2NdW2QnHbADlcc_826xxxPgF_GsQ/exec';
 function sendToSheet(data) {
   if (SHEET_ENDPOINT.indexOf('http') !== 0) return;
@@ -139,15 +177,19 @@ document.getElementById('qform').addEventListener('submit', function (e) {
     picks.push((i + 1) + c.value); count[c.value]++;
   }
   var type = 'LSTO'.split('').sort(function (a, b) { return count[b] - count[a]; })[0];
-  sendToSheet({ 来源: '测验', 姓名: v('p-name'), WhatsApp: v('p-phone'), IG: v('p-ig') || '-', 类型: TYPES[type][0] + ' (' + type + ')', L: count.L, S: count.S, T: count.T, O: count.O, 答案: picks.join(' '), 为什么来: v('o1'), 三年后: v('o2'), 强项与担心: v('o3') });
+  var typeLabel = TYPES[type].zh[0] + ' ' + TYPES[type].en[0] + ' (' + type + ')';
   var NL = String.fromCharCode(10);
-  var msg = '测评结果 🌸' + NL +
-    '姓名:' + v('p-name') + NL + 'WhatsApp:' + v('p-phone') + NL + 'IG:' + (v('p-ig') || '-') + NL +
-    '类型:' + TYPES[type][0] + ' (' + type + ')  L' + count.L + ' S' + count.S + ' T' + count.T + ' O' + count.O + NL +
-    '答案:' + picks.join(' ') + NL +
-    '为什么来:' + v('o1') + NL + '三年后:' + v('o2') + NL + '强项与担心:' + v('o3');
-  document.getElementById('r-name').textContent = TYPES[type][0];
-  document.getElementById('r-desc').textContent = TYPES[type][1];
+  sendToSheet({ 来源: '测验', 姓名: v('p-name'), WhatsApp: v('p-phone'), IG: v('p-ig') || '-', 类型: typeLabel,
+    L: count.L, S: count.S, T: count.T, O: count.O, 答案: picks.join(' '),
+    为什么来: v('o1'), 三年后: v('o2'), 强项与担心: v('o3') });
+  var msg = (EN ? 'Assessment Result 🌸' : '测评结果 🌸') + NL +
+    (EN ? 'Name' : '姓名') + ':' + v('p-name') + NL + 'WhatsApp:' + v('p-phone') + NL + 'IG:' + (v('p-ig') || '-') + NL +
+    (EN ? 'Type' : '类型') + ':' + typeLabel + '  L' + count.L + ' S' + count.S + ' T' + count.T + ' O' + count.O + NL +
+    (EN ? 'Answers' : '答案') + ':' + picks.join(' ') + NL +
+    (EN ? 'Why' : '为什么来') + ':' + v('o1') + NL + (EN ? '3yr' : '三年后') + ':' + v('o2') + NL +
+    (EN ? 'Strength/Worry' : '强项与担心') + ':' + v('o3');
+  document.getElementById('r-name').textContent = TYPES[type].zh[0] + ' · ' + TYPES[type].en[0];
+  document.getElementById('r-desc').textContent = EN ? TYPES[type].en[1] : TYPES[type].zh[1];
   document.getElementById('r-wa').href = 'https://wa.me/601162206885?text=' + encodeURIComponent(msg);
   document.getElementById('quiz').style.display = 'none';
   document.getElementById('result').style.display = 'block';
